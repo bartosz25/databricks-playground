@@ -1,0 +1,11 @@
+# Skip with git commit -a -m "..." --no-verify
+repos:
+  - repo: local
+    hooks:
+      - id: dab-validation
+        verbose: true
+        name: Validate Dab
+        entry: poe validate_dab
+        language: system
+        fail_fast: true
+        pass_filenames: false

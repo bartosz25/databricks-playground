@@ -1,0 +1,45 @@
+[project]
+name = "poe_demo"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    # Any dependencies for jobs and pipelines in this project can be added here
+    # See also https://docs.databricks.com/dev-tools/bundles/library-dependencies
+    #
+    # LIMITATION: for pipelines, dependencies are cached during development;
+    # add dependencies to the 'environment' section of your pipeline.yml file instead
+]
+
+[dependency-groups]
+dev = [
+    "poethepoet==0.40.0"
+]
+
+[project.scripts]
+main = "poe_demo.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.black]
+line-length = 125
+
+[tool.poe.tasks.download_file]
+help ="Downloads a text file from the workspace."
+cmd = "databricks workspace export --format SOURCE --profile personal_free_edition --file ./dist/downloaded_file.txt /Workspace/Shared/file_to_download.txt"
+
+
+[tool.poe.tasks._build_internal]
+shell = """
+rm -rf ./dist
+uv build --sdist --wheel
+"""
+
+
+[tool.poe.tasks.build]
+help = "Builds the wheel"
+sequence = [
+    "_build_internal", "download_file"
+]

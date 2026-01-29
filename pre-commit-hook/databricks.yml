@@ -1,0 +1,22 @@
+# This is a Databricks asset bundle definition for pre_commit_hook.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: pre_commit_hook
+  uuid: 5b0eb41b-f1bd-4add-9bc6-2591e3b645bf
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: poe build
+
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: XXX
