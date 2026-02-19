@@ -1,0 +1,24 @@
+resources:
+  jobs:
+    sample_job:
+      name: sample_job
+      email_notifications:
+        on_failure: ${var.failure_extra_users}
+      tasks:
+        - task_key: python_wheel_task
+          python_wheel_task:
+            package_name: env_variables_dab
+            entry_point: main
+            named_parameters:
+              job_name: "{{job.name}}"
+              volume_path_orders: ${var.orders_path}
+              items_catalog_path: ${var.items_catalog_path}
+              a_variable: ${var.a_variable}
+              warehouse_id_sql_queries: ${var.warehouse_id_sql_queries}
+          environment_key: default
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"
+            dependencies:
+              - ../dist/*.whl
