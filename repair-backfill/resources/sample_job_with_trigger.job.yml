@@ -1,0 +1,34 @@
+resources:
+  jobs:
+    sample_job_with_trigger:
+      name: sample_job_with_trigger
+      tasks:
+        - task_key: python_wheel_task
+          python_wheel_task:
+            package_name: repair_backfill
+            entry_point: main
+            named_parameters:
+              execution_time: "{{ job.trigger.time.iso_date }}"
+              backfill_time: "empty on purpose"
+          environment_key: default
+        - task_key: python_wheel_task_2
+          depends_on:
+            - task_key: python_wheel_task
+          python_wheel_task:
+            package_name: repair_backfill
+            entry_point: main
+            named_parameters:
+              execution_time: "{{ job.trigger.time.iso_date }}"
+              backfill_time: "empty on purpose"
+          environment_key: default
+        - task_key: trigger_sample_job
+          depends_on:
+            - task_key: python_wheel_task_2
+          run_job_task:
+            job_id: ${resources.jobs.sample_job_triggered.id}
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"
+            dependencies:
+              - ../dist/*.whl
