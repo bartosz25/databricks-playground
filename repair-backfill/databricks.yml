@@ -1,0 +1,21 @@
+# This is a Databricks asset bundle definition for repair_backfill.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: repair_backfill
+  uuid: 5b0eb41b-f1bd-4add-9bc6-2591e3b645bf
+
+include:
+  - resources/*.yml
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --sdist --wheel
+
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: YOUR WORKSPACE
