@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    scd_type_2_snapshot:
+      name: "[Snapshot] Slowly Changing Dimensions Type 2 demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/scd/scd_type_2_snapshot.py

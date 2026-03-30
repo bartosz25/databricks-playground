@@ -11,7 +11,7 @@
     $ databricks bundle deploy --target dev --profile personal_free_wfc
     ```
 
-## Using the demo
+## SCD with Change Data Capture - the demo
 1. Create the demo raw table with the blog posts:
 ```sql
 DROP TABLE IF EXISTS workspace.default.blog_posts_raw;
@@ -111,3 +111,108 @@ SELECT * FROM  default.scd_demo.blog_posts_scd_type_2
 ```
 For the SCD Type 2 the removed record (sdp_intro) just got the end_date defined:
 ![scd_2_result_3.png](assets/scd_2_result_3.png)
+
+## SCD with snapshots - the demo
+1. Recreate the table:
+```sql
+DROP TABLE IF EXISTS workspace.default.blog_posts_raw;
+CREATE TABLE workspace.default.blog_posts_raw (
+    id STRING, 
+    title STRING,
+    category STRING
+);
+
+INSERT INTO workspace.default.blog_posts_raw VALUES 
+    ('sdp_intro', 'Spark Declarative Pipelines, the introduction', 'Apache Spark'),
+    ('sdp_further', 'Spark Declarative Pipelines, going further', 'Apache Spark'),
+    ('sdp_internals', 'Spark Declarative Pipelines, internals', 'Apache Spark');
+
+```
+
+2. Explain [scd_type_1_snapshot.py](src/scd/scd_type_1_snapshot.py):
+* the code for the snapshot version looks like defining the SCD table declaration
+  * you won't find time-related columns
+* an important difference with the CDC methods is the upstream table which cannot be
+  a streaming table; after all, we deal with full snapshots, so to compare the content 
+  of the snapshots we always need the full picture
+
+3. Explain [scd_type_2_snapshot.py](src/scd/scd_type_2_snapshot.py)
+* the single difference here is the SCD type set to 2
+
+4. Run scd_type_1_snapshot and scd_type_2_snapshot.
+
+5. Check the content of the both output tables:
+```sql
+SELECT * FROM  default.scd_demo.blog_posts_scd_type_1_snapshot
+```
+For this SCD Type 1 the input table is simply the output table:
+![scd_1_snapshot_result_1.png](assets/scd_1_snapshot_result_1.png)
+
+```sql
+SELECT * FROM  default.scd_demo.blog_posts_scd_type_2_snapshot
+```
+For the Type 2 you can see the two versioning columns defined as:
+![scd_2_snapshot_result_1.png](assets/scd_2_snapshot_result_1.png)
+
+6. Let's now replace the content of the table:
+```sql
+TRUNCATE TABLE workspace.default.blog_posts_raw;
+INSERT INTO workspace.default.blog_posts_raw VALUES 
+('sdp_intro', 'Spark Declarative Pipelines, the introduction', 'Apache Spark Structured Streaming'),
+('sdp_further', 'Spark Declarative Pipelines, going further', 'Apache Spark Structured Streaming'),
+('sdp_internals', 'Spark Declarative Pipelines, internals', 'Apache Spark Structured Streaming');
+```
+
+7. Run the two SCD pipelines again.
+
+8. Check the output:
+```sql
+SELECT * FROM  default.scd_demo.blog_posts_scd_type_1_snapshot
+```
+For this SCD Type 1 the input table is simply the output table:
+![scd_1_snapshot_result_2.png](assets/scd_1_snapshot_result_2.png)
+
+```sql
+SELECT * FROM  default.scd_demo.blog_posts_scd_type_2_snapshot
+```
+For the Type 2 you can see the two versioning columns defined as:
+![scd_2_snapshot_result_2.png](assets/scd_2_snapshot_result_2.png)
+
+9. Finally, let's see the delete operation:
+```sql
+TRUNCATE TABLE workspace.default.blog_posts_raw;
+INSERT INTO workspace.default.blog_posts_raw VALUES 
+('sdp_further', 'Spark Declarative Pipelines, going further', 'Apache Spark Structured Streaming'),
+('sdp_internals', 'Spark Declarative Pipelines, internals', 'Apache Spark Structured Streaming');
+```
+10. Run the two SCD pipelines again.
+
+11. Check the output:
+```sql
+SELECT * FROM  default.scd_demo.blog_posts_scd_type_1_snapshot
+```
+For this SCD Type 1 the input table is simply the output table:
+![scd_1_snapshot_result_3.png](assets/scd_1_snapshot_result_3.png)
+
+```sql
+SELECT * FROM  default.scd_demo.blog_posts_scd_type_2_snapshot
+```
+For the Type 2 you can see the removal action executed the same way as for the CDC-based SCD Type 2 table:
+![scd_2_snapshot_result_3.png](assets/scd_2_snapshot_result_3.png)
+
+## SCD and determinism - the demo
+1. Let's now modify the input by running this query:
+```sql
+TRUNCATE TABLE workspace.default.blog_posts_raw;
+INSERT INTO workspace.default.blog_posts_raw VALUES 
+('sdp_further', 'Spark Declarative Pipelines, going further', 'Apache Spark Structured Streaming'),
+('sdp_internals', 'Spark Declarative Pipelines, internals', 'Apache Spark Structured Streaming'),
+('sdp_internals', 'Spark Declarative Pipelines, THE internals', 'Apache Spark Structured Streaming');
+```
+
+2. Run both pipelines.
+
+3. Both pipelines should fail at the same stage of processing the input table:
+
+![lsdp_duplicates_error.png](assets/lsdp_duplicates_error.png)
+![lsdp_duplicates_error_photon.png](assets/lsdp_duplicates_error_photon.png)

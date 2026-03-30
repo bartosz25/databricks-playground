@@ -1,0 +1,19 @@
+resources:
+  pipelines:
+    numbers_pipeline:
+      name: lakeflow_spark_declarative_pipelines_demo
+      continuous: true
+      development: false
+      photon: true
+      channel: CURRENT
+      serverless: true
+      catalog: ${var.catalog}
+      target: ${var.schema}
+      libraries:
+        - file:
+            path: ../src/lakeflow_spark_declarative_pipelines/rate_numbers.py
+      configuration:
+        # Surface the bundle source path so the pipeline can resolve files.
+        bundle.sourcePath: ${workspace.file_path}/src
+        # Tune micro-batch interval (seconds); adjust for your SLA.
+        #spark.sql.streaming.noDataMicroBatches.enabled: "false"

@@ -1,0 +1,30 @@
+resources:
+  jobs:
+    continuous_job_1_task_availablenow:
+      name: continuous_job_1_task_availablenow
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: available_now_task
+          python_wheel_task:
+            package_name: continuous_trigger
+            entry_point: available_now_job
+          named_parameters:
+            path: /tmp/continuous_job_1_task_availablenow
+      job_clusters:
+        - job_cluster_key: continuous_job_1_task_availablenow
+          new_cluster:
+             spark_version: ${var.dab_spark_version}
+             node_type_id: i4i.large
+             autotermination_minutes: 5
+             runtime_engine: STANDARD
+             data_security_mode: SINGLE_USER
+             spark_conf:
+               "spark.databricks.cluster.profile": "singleNode"
+               "spark.master": "local[*, 2]"
+             custom_tags:
+               "ResourceClass": "SingleNode"
+             workload_type:
+               clients:
+                 notebooks: false
+                 jobs: true
+             num_workers: 0

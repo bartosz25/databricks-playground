@@ -1,0 +1,17 @@
+from continuous_trigger.arguments import get_parser
+from continuous_trigger.producer import write_files_to_tmp
+from continuous_trigger.spark_session_factory import create_spark_session_for_localhost_or_databricks
+
+
+def main():
+    parser = get_parser()
+    spark = create_spark_session_for_localhost_or_databricks()
+
+    write_files_to_tmp(parser.path)
+
+    reader = spark.readStream.text(path=parser.path)
+
+    (reader.writeStream.format('console').option('truncate', False)
+     .option('checkpointLocation', f'/tmp/checkpoint_{parser.path}')
+     .trigger(availableNow=True)
+     .start())
