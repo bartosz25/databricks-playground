@@ -1,0 +1,13 @@
+[project]
+name = "incremental_refreshes"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.10,<3.13"
+[dependency-groups]
+dev = [
+    "pyspark==4.1.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

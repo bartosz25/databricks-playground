@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    window_demo:
+      name: "Window demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/incremental_refreshes/window_demo.py

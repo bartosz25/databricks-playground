@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    group_aggregate_demo:
+      name: "Group aggregate demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/incremental_refreshes/group_aggregate_demo.py

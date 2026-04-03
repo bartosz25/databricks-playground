@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    row_demo:
+      name: "Row-based demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/incremental_refreshes/row_demo.py

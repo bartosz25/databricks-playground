@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    broken_window_demo:
+      name: "Broken window demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/incremental_refreshes/broken_window_demo.py

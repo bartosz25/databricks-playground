@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    append_partition_row_demo:
+      name: "Append-only, partition overwrite and row-based demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/incremental_refreshes/append_partition_row_demo.py
