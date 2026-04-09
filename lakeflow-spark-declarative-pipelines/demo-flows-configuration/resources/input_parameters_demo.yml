@@ -1,0 +1,14 @@
+resources:
+  pipelines:
+    input_parameters_demo:
+      name: "Input parameters demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/flows_and_configuration/input_parameters_demo.py
+      configuration:
+        input_parameters.expected_modulo: 0

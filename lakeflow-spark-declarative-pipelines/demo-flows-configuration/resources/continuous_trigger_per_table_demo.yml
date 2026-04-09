@@ -1,0 +1,16 @@
+resources:
+  pipelines:
+    continuous_trigger_per_table_demo:
+      name: "Continuous trigger per table demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: true
+      development: false
+      photon: true
+      edition: ADVANCED
+      libraries:
+        - file:
+            path: ../src/flows_and_configuration/continuous_trigger_per_table_demo.py
+

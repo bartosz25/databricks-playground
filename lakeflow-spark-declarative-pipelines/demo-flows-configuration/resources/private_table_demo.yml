@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    private_table_demo:
+      name: "Private table demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/flows_and_configuration/private_table_demo.py

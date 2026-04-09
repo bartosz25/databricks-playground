@@ -1,0 +1,15 @@
+resources:
+  pipelines:
+    continuous_trigger_demo:
+      name: "Continuous trigger demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: true
+      development: false
+      libraries:
+        - file:
+            path: ../src/flows_and_configuration/continuous_trigger_demo.py
+      configuration:
+        pipelines.trigger.interval: "2 minutes"

@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    similar_to_foreach_batch_sink_demo:
+      name: "Similar to ForeachBatch sink demo"
+      catalog: workspace
+      schema: default
+      serverless: true
+      channel: CURRENT
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/flows_and_configuration/similar_to_foreach_batch_sink_demo.py
