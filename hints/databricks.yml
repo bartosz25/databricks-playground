@@ -1,0 +1,15 @@
+# This is a Databricks asset bundle definition for hints.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: hints
+  uuid: 97080c4d-5c52-48d0-819c-80f060eed9fb
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: YOUR WORKSPACE

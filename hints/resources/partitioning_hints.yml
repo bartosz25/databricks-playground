@@ -1,0 +1,12 @@
+resources:
+  jobs:
+    partitioning_hints:
+      name: Partitioning hints
+      tasks:
+        - task_key: notebook_task
+          notebook_task:
+            notebook_path: ../src/partitioning_hints.ipynb
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"

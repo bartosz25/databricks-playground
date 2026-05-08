@@ -1,0 +1,12 @@
+resources:
+  jobs:
+    range_join_hints:
+      name: Range join hints
+      tasks:
+        - task_key: notebook_task
+          notebook_task:
+            notebook_path: ../src/range_join_hints.ipynb
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"

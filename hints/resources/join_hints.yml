@@ -1,0 +1,12 @@
+resources:
+  jobs:
+    join_hints:
+      name: Join hints
+      tasks:
+        - task_key: notebook_task
+          notebook_task:
+            notebook_path: ../src/join_hints.ipynb
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"
