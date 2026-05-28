@@ -1,0 +1,57 @@
+[project]
+name = "ruff_dab"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.12,<=3.14"
+dependencies = [
+    # Any dependencies for jobs and pipelines in this project can be added here
+    # See also https://docs.databricks.com/dev-tools/bundles/library-dependencies
+    #
+    # LIMITATION: for pipelines, dependencies are cached during development;
+    # add dependencies to the 'environment' section of your pipeline.yml file instead
+]
+
+[dependency-groups]
+dev = [
+    "poethepoet==0.40.0",
+    "pre-commit==4.5.1",
+    "ruff==0.15.13"
+]
+
+[project.scripts]
+main = "ruff_dab.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "UP", "C90", "PERF", "I", "G", "SIM", "S", "DTZ", "N", "PLR"]
+#ignore = ["F841"]
+
+
+[tool.ruff.format]
+indent-style = "tab"
+line-ending = "lf"
+nested-string-quote-style = "preferred"
+quote-style = "single"
+
+
+[tool.poe.tasks.validate_code]
+help ="Lints and checks for formatting issues."
+shell = """
+ruff check
+ruff format --check
+"""
+
+[tool.poe.tasks._build_internal]
+shell = """
+rm -rf ./dist
+uv build --sdist --wheel
+"""
+
+
+[tool.poe.tasks.build_valid_wheel]
+sequence = [
+    "validate_code", "_build_internal"
+]

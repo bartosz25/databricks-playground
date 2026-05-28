@@ -1,0 +1,10 @@
+repos:
+  - repo: local
+    hooks:
+      - id: lint
+        verbose: true
+        name: Validate code
+        entry: poe validate_code
+        language: system
+        fail_fast: true
+        pass_filenames: false

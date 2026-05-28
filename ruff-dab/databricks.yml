@@ -1,7 +1,7 @@
-# This is a Databricks asset bundle definition for continuous_trigger.
+# This is a Databricks asset bundle definition for poe_demo.
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 bundle:
-  name: incremental_refresh_demos
+  name: ruff_dab
   uuid: 5b0eb41b-f1bd-4add-9bc6-2591e3b645bf
 
 include:
@@ -10,7 +10,7 @@ include:
 artifacts:
   python_artifact:
     type: whl
-    build: uv build --sdist --wheel
+    build: poe build_valid_wheel
 
 
 targets:
@@ -18,4 +18,4 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://dbc-d4ba7c54-6fba.cloud.databricks.com
+      host: XXXX
