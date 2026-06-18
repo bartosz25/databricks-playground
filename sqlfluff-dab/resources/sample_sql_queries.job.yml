@@ -1,0 +1,15 @@
+resources:
+  jobs:
+    sample_sql_job:
+      name: sample_sql_job
+      tasks:
+        - task_key: active_users
+          sql_task:
+            warehouse_id: ${var.warehouse_id}
+            file:
+              path: ../src/orders_raw.sql
+        - task_key: revenue
+          sql_task:
+            warehouse_id: ${var.warehouse_id}
+            file:
+              path: ../src/orders_raw.sql

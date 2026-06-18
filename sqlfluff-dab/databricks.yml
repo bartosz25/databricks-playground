@@ -1,0 +1,20 @@
+# This is a Databricks asset bundle definition for poe_demo.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: sqlfluff_dab
+  uuid: 530eb41b-f1bd-4add-9bc6-2591e3b645bf
+
+include:
+  - resources/*.yml
+
+variables:
+  warehouse_id:
+    description: Which Databricks warehouse to use
+
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: XXXX

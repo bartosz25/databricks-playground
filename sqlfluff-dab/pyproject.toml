@@ -1,0 +1,39 @@
+[project]
+name = "sqlfluff_dab"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.12,<=3.14"
+dependencies = [
+    # Any dependencies for jobs and pipelines in this project can be added here
+    # See also https://docs.databricks.com/dev-tools/bundles/library-dependencies
+    #
+    # LIMITATION: for pipelines, dependencies are cached during development;
+    # add dependencies to the 'environment' section of your pipeline.yml file instead
+]
+
+[dependency-groups]
+dev = [
+    "poethepoet==0.40.0",
+    "pre-commit==4.5.1",
+    "sqlfluff==4.2.2"
+]
+
+
+[tool.sqlfluff.core]
+dialect = "databricks"
+templater = "python"
+sql_file_exts = ".sql"
+max_line_length = 80
+
+[tool.sqlfluff.indentation]
+tab_space_size = 4
+
+[tool.sqlfluff.templater.python.context]
+users_table = "test_1"
+orders_table = "test_1"
+
+[tool.poe.tasks.validate_code]
+help ="Lints and checks for formatting issues."
+shell = """
+sqlfluff lint queries/
+"""
