@@ -1,0 +1,41 @@
+resources:
+  jobs:
+    sample_job:
+      name: sample_job
+      tasks:
+        - task_key: check_if_file_exists
+          max_retries: 5
+          min_retry_interval_millis: 60000
+          spark_python_task:
+            python_file: ../src/python_script_task/file_checker.py
+            parameters: ['--file_to_check', '/Volumes/workspace/default/countries/countries_list.txt']
+            source: WORKSPACE
+          environment_key: default
+        - task_key: generate_countries_list
+          depends_on:
+            - task_key: check_if_file_exists
+          spark_python_task:
+            python_file: ../src/python_script_task/country_list_generator.py
+            parameters: ['--file_to_read', '/Volumes/workspace/default/countries/countries_list.txt']
+            source: WORKSPACE
+          environment_key: default
+        - task_key: process_generated_countries
+          depends_on:
+            - task_key: generate_countries_list
+          for_each_task:
+            inputs: '{{ tasks.generate_countries_list.values.countries_list }}'
+            concurrency: 2
+            task:
+              task_key: process_country
+              environment_key: default
+              python_wheel_task:
+                package_name: python_script_task
+                entry_point: process_country
+                named_parameters:
+                  country: "{{input}}"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"
+            dependencies:
+              - ../dist/*.whl

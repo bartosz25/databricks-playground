@@ -1,0 +1,21 @@
+# This is a Databricks asset bundle definition for poe_demo.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: python_script_task
+  uuid: 6b0eb41b-a2bd-4add-9bc6-2591e3b645bf
+
+include:
+  - resources/*.yml
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --sdist --wheel
+
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: HOST
