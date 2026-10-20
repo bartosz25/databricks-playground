@@ -1,0 +1,28 @@
+# This is a Databricks asset bundle definition for poe_demo.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: table_trigger_demo
+  uuid: xde1d41b-a2bd-4add-9bc6-2591e3b645bf
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog that holds the demo schema
+    default: workspace
+  schema:
+    description: Schema created by the setup script
+    default: table_trigger_demo
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+targets:
+  dev:
+    mode: production
+    workspace:
+      root_path: /Workspace/Users/waitingforcodecom@gmail.com/.bundle/${bundle.name}/${bundle.target}
+      host: https://dbc-d4ba7c54-6fba.cloud.databricks.com

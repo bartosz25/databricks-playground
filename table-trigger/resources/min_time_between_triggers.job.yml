@@ -1,0 +1,28 @@
+resources:
+  jobs:
+    min_time_between_triggers:
+      name: min_time_between_triggers
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      trigger:
+        table_update:
+          table_names:
+            - ${var.catalog}.${var.schema}.min_time_between_triggers_seconds_src
+          min_time_between_triggers_seconds: 120
+      tasks:
+        - task_key: consume
+          environment_key: default
+          python_wheel_task:
+            package_name: table_trigger
+            entry_point: read_tables
+            named_parameters:
+              scenario: min_time_between_triggers
+              trigger_time: "{{job.trigger.time.iso_datetime}}"
+              updated_tables: "{{job.trigger.table_update.updated_tables}}"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl

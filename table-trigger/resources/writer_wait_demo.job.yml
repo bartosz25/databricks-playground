@@ -1,0 +1,19 @@
+resources:
+  jobs:
+    writer_wait_demo:
+      name: writer_wait_demo
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: write_data
+          environment_key: default
+          python_wheel_task:
+            package_name: table_trigger
+            entry_point: writer_wait_demo
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl

@@ -1,0 +1,29 @@
+resources:
+  jobs:
+    any_updated_trigger:
+      name: any_updated_trigger
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      trigger:
+        table_update:
+          table_names:
+            - ${var.catalog}.${var.schema}.all_any_updated_src_a
+            - ${var.catalog}.${var.schema}.all_any_updated_src_b
+          condition: ANY_UPDATED
+      tasks:
+        - task_key: consume
+          environment_key: default
+          python_wheel_task:
+            package_name: table_trigger
+            entry_point: read_tables
+            named_parameters:
+              scenario: any_updated_trigger
+              trigger_time: "{{job.trigger.time.iso_datetime}}"
+              updated_tables: "{{job.trigger.table_update.updated_tables}}"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl
