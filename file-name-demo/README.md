@@ -7,6 +7,7 @@ databricks configure
 ```
 
 Set your workspace host in [databricks.yml](databricks.yml)
+
 2. Create demo table and volume from Databricks SQL Editor:
 ```sql
 USE CATALOG workspace;
@@ -126,5 +127,5 @@ DROP SCHEMA IF EXISTS default.file_name_demo CASCADE;
 ```
 
 ```bash
-databricks bundle destroy
+databricks bundle destroy --profile personal_free_wfc
 ```
