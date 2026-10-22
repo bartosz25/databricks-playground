@@ -112,6 +112,8 @@ and the `manifest_reader` job starting once the manifest file is written:
 ![manifest_generator_trigger_.png](assets/manifest_generator_trigger_.png)
 ![manifest_generator_trigger_run.png](assets/manifest_generator_trigger_run.png)
 
+> The manifest will generate 4 files because the output path in the sink is a directory and not the file name
+
 **manifest_reader**
 
 ![manifest_reader_trigger.png](assets/manifest_reader_trigger.png)
