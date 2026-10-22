@@ -1,0 +1,18 @@
+bundle:
+  name: file_name_demo
+
+include:
+  - resources/*.yml
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+targets:
+  dev:
+    mode: production
+    default: true
+    workspace:
+      root_path: /Workspace/Users/waitingforcodecom@gmail.com/.bundle/${bundle.name}/${bundle.target}
+      host: https://dbc-d4ba7c54-6fba.cloud.databricks.com

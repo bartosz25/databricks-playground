@@ -1,0 +1,22 @@
+[project]
+name = "file_name_demo"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.12,<=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = ["pyspark==4.2.0"]
+
+[project.scripts]
+writer_autoloader = "file_name_demo.writer_autoloader:write_files"
+autoloader = "file_name_demo.autoloader:read_files"
+writer_consistent_naming = "file_name_demo.writer_consistent_naming:write_files"
+consistent_naming = "file_name_demo.consistent_naming:read_files"
+writer_manifest = "file_name_demo.writer_manifest:write_files"
+manifest_generator = "file_name_demo.manifest_generator:generate_manifest"
+manifest_reader = "file_name_demo.manifest_reader:read_manifest"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
