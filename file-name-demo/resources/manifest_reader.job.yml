@@ -16,7 +16,7 @@ resources:
             package_name: file_name_demo
             entry_point: manifest_reader
             named_parameters:
-              volume_path: "/Volumes/workspace/file_name_demo/to_process/manifest/"
+              volume_path: "{{job.trigger.file_arrival.location}}"
               checkpoint_path: "/Volumes/workspace/file_name_demo/to_process/checkpoints/manifest_reader/"
       environments:
         - environment_key: default

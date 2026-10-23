@@ -16,7 +16,7 @@ resources:
             package_name: file_name_demo
             entry_point: consistent_naming
             named_parameters:
-              volume_path: "/Volumes/workspace/file_name_demo/to_process/raw_naming/"
+              volume_path: "{{job.trigger.file_arrival.location}}"
               trigger_date: "{{job.trigger.time.iso_date}}"
       environments:
         - environment_key: default
