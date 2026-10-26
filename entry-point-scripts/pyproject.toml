@@ -1,0 +1,17 @@
+[project]
+name = "entry_point_scripts"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.12,<=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = ["pyspark==4.2.0"]
+
+[project.scripts]
+# main_exposed and main_hidden are intentionally NOT declared here
+read_tables = "entry_point_scripts.declared_entry_point:read_tables_main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

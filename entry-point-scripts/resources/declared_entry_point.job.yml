@@ -1,0 +1,21 @@
+resources:
+  jobs:
+    declared_entry_point:
+      name: declared_entry_point
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: declared_entry_point
+          environment_key: default
+          python_wheel_task:
+            package_name: entry_point_scripts
+            entry_point: read_tables
+            named_parameters:
+              demo_label: "declared"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl

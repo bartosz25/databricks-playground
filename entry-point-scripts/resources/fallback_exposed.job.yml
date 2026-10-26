@@ -1,0 +1,19 @@
+resources:
+  jobs:
+    fallback_exposed:
+      name: fallback_exposed
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: fallback_exposed
+          environment_key: default
+          python_wheel_task:
+            package_name: entry_point_scripts
+            entry_point: main_exposed
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl
