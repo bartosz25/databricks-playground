@@ -15,4 +15,4 @@ targets:
     default: true
     workspace:
       root_path: /Workspace/Users/waitingforcodecom@gmail.com/.bundle/${bundle.name}/${bundle.target}
-      host: https://dbc-d4ba7c54-6fba.cloud.databricks.com
+      host: [HOST]
