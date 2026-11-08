@@ -1,0 +1,21 @@
+resources:
+  jobs:
+    yaml_defined:
+      name: yaml_defined
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: hello
+          environment_key: default
+          python_wheel_task:
+            package_name: pydabs_demo
+            entry_point: hello
+            named_parameters:
+              defined_in: "yaml"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../dist/*.whl

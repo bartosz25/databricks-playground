@@ -1,0 +1,39 @@
+[project]
+name = "pydabs_demo"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.12,<=3.14"
+dependencies = [] # empty — Databricks provides PySpark at runtime
+
+[dependency-groups]
+bundles = ["databricks-bundles==1.13.0"]
+dev = [
+    { include-group = "bundles" },
+    "databricks-connect==19.*",
+]
+test = [
+    { include-group = "bundles" },
+    "pyspark==4.2.0",
+    "pytest",
+]
+
+[tool.uv]
+conflicts = [
+    [{ group = "dev" }, { group = "test" }],
+]
+
+[tool.pytest.ini_options]
+# the entry point modules log to sys.stdout, which is closed by the pytest capture before the PySpark shutdown
+addopts = "-s"
+
+[project.scripts]
+hello = "pydabs_demo.hello:hello"
+bronze_to_silver = "pydabs_demo.bronze_to_silver:bronze_to_silver"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+# resources/ is a Python package too, but it's only used by the Databricks CLI at deployment time
+packages = ["src/pydabs_demo"]
