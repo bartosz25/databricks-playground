@@ -32,4 +32,4 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://dbc-d4ba7c54-6fba.cloud.databricks.com
+      host: [YOUR HOST]
