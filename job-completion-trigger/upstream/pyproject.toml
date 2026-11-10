@@ -1,0 +1,16 @@
+[project]
+name = "upstream_jobs"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.12,<=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = ["pyspark==4.2.0"]
+
+[project.scripts]
+upstream_job = "upstream_jobs.upstream_job:run_upstream_job"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

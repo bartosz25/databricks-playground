@@ -1,0 +1,21 @@
+resources:
+  jobs:
+    s4_upstream_orders:
+      name: s4_upstream_orders
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: upstream_job
+          environment_key: default
+          python_wheel_task:
+            package_name: upstream_jobs
+            entry_point: upstream_job
+            named_parameters:
+              should_fail: "true"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl
