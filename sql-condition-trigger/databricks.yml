@@ -1,0 +1,49 @@
+bundle:
+  name: sql_condition_trigger
+
+include:
+  - resources/*.yml
+
+scripts:
+  # bundles don't have a queries resource, the script creates them before the deployment
+  create_condition_queries:
+    content: uv run --group queries python create_condition_queries.py
+    env:
+      WAREHOUSE_ID: ${var.warehouse_id}
+      BUNDLE_TARGET: ${bundle.target}
+  # deletes the queries created by create_condition_queries, as `bundle destroy` doesn't know about them
+  destroy_condition_queries:
+    content: uv run --group queries python destroy_condition_queries.py
+
+variables:
+  catalog:
+    description: Unity Catalog catalog that holds the demo schema
+    default: workspace
+  schema:
+    description: Schema created by the setup script
+    default: sql_condition_trigger
+  warehouse_id:
+    description: SQL warehouse evaluating the SQL conditions
+    lookup:
+      warehouse: 'Serverless Starter Warehouse'
+  # the create_condition_queries script overrides the defaults in .databricks/bundle/<target>/variable-overrides.json
+  count_without_having_query_id:
+    description: Query created by the create_condition_queries script
+    default: 'set-by-create_condition_queries'
+  wait_for_orders_query_id:
+    description: Query created by the create_condition_queries script
+    default: 'set-by-create_condition_queries'
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+targets:
+  dev:
+    mode: development
+    default: true
+    # the development mode pauses the triggers; each job sets `pause_status: UNPAUSED` explicitly as the
+    # `trigger_pause_status: UNPAUSED` preset is rejected for the development mode
+    workspace:
+      host: https://dbc-d4ba7c54-6fba.cloud.databricks.com

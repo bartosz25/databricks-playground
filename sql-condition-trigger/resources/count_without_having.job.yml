@@ -1,0 +1,31 @@
+resources:
+  jobs:
+    count_without_having:
+      name: count_without_having
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      trigger:
+        pause_status: UNPAUSED
+        periodic:
+          interval: 1
+          unit: MINUTES
+        # COUNT(*) always returns 1 row, the job runs on every condition evaluation
+        sql_condition:
+          sql_query_id: ${var.count_without_having_query_id}
+          warehouse_id: ${var.warehouse_id}
+          trigger_mode: QUERY_RETURNS_ROWS
+      tasks:
+        - task_key: display_orders
+          environment_key: default
+          python_wheel_task:
+            package_name: sql_condition_trigger
+            entry_point: display_table
+            named_parameters:
+              table: "${var.catalog}.${var.schema}.orders"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../dist/*.whl

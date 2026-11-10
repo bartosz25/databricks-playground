@@ -1,0 +1,24 @@
+[project]
+name = "sql_condition_trigger"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.12,<=3.14"
+dependencies = []           # empty — Databricks provides PySpark at runtime
+
+[dependency-groups]
+# required by create_condition_queries.py and destroy_condition_queries.py to manage the SQL queries
+queries = ["databricks-sdk"]
+dev = [
+    { include-group = "queries" },
+    "pyspark==4.2.0",
+]
+
+[project.scripts]
+display_table = "sql_condition_trigger.display_table:display_table"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sql_condition_trigger"]
