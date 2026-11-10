@@ -1,0 +1,44 @@
+bundle:
+  name: sql_condition_trigger_pydab
+
+python:
+  venv_path: .venv
+  mutators:
+    - "mutators:get_condition_query_ids"
+
+scripts:
+  destroy_condition_queries:
+    content: uv run --group queries python destroy_condition_queries.py
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog that holds the demo schema
+    default: workspace
+  schema:
+    description: Schema created by the setup script
+    default: sql_condition_trigger
+  warehouse_id:
+    description: SQL warehouse evaluating the SQL conditions
+    lookup:
+      warehouse: 'Serverless Starter Warehouse'
+  # the set_condition_query_ids mutator replaces the defaults with the ids of the created queries
+  customers_changed_query_id:
+    description: Query created by the set_condition_query_ids mutator
+    default: 'set-by-set_condition_query_ids'
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+targets:
+  dev:
+    mode: development
+    default: true
+    # the development mode pauses the triggers; each job sets `pause_status: UNPAUSED` explicitly as the
+    # `trigger_pause_status: UNPAUSED` preset is rejected for the development mode
+    workspace:
+      host: https://dbc-d4ba7c54-6fba.cloud.databricks.com

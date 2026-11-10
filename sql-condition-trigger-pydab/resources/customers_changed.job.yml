@@ -1,0 +1,32 @@
+resources:
+  jobs:
+    customers_changed:
+      name: customers_changed
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      trigger:
+        pause_status: UNPAUSED
+        periodic:
+          interval: 1
+          unit: MINUTES
+        # the query returns a single cell with the hash of the table; the job runs only when the hash changes
+        # and on the first evaluation, as there is no previous value to compare with
+        sql_condition:
+          sql_query_id: ${var.customers_changed_query_id}
+          warehouse_id: ${var.warehouse_id}
+          trigger_mode: RESULT_VALUE_CHANGES
+      tasks:
+        - task_key: display_customers
+          environment_key: default
+          python_wheel_task:
+            package_name: sql_condition_trigger
+            entry_point: display_table
+            named_parameters:
+              table: "${var.catalog}.${var.schema}.customers"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../dist/*.whl
