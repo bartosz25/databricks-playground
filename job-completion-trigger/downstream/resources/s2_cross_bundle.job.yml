@@ -1,0 +1,27 @@
+resources:
+  jobs:
+    s2_cross_bundle:
+      name: s2_cross_bundle
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      trigger:
+        job_completion:
+          jobs:
+            - workspace_id: ${var.workspace_id}
+              job_id: ${var.s2_upstream_job_id}
+          if_status: SUCCESS
+      tasks:
+        - task_key: cross_bundle
+          environment_key: default
+          python_wheel_task:
+            package_name: job_completion_trigger
+            entry_point: show_completed_jobs
+            named_parameters:
+              completed_jobs: "{{job.trigger.job_completion.completed_jobs}}"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl

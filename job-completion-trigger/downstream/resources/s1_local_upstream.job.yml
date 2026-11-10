@@ -1,0 +1,21 @@
+resources:
+  jobs:
+    s1_local_upstream:
+      name: s1_local_upstream
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: local_upstream
+          environment_key: default
+          python_wheel_task:
+            package_name: job_completion_trigger
+            entry_point: local_upstream
+            named_parameters:
+              should_fail: "false"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl

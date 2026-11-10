@@ -1,0 +1,17 @@
+[project]
+name = "job_completion_trigger"
+version = "0.0.1"
+authors = [{ name = "contact@waitingforcode.com" }]
+requires-python = ">=3.12,<=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = ["pyspark==4.2.0"]
+
+[project.scripts]
+local_upstream = "job_completion_trigger.local_upstream:run_local_upstream"
+show_completed_jobs = "job_completion_trigger.completed_jobs:show_completed_jobs"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

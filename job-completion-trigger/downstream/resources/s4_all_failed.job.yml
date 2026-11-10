@@ -1,0 +1,29 @@
+resources:
+  jobs:
+    s4_all_failed:
+      name: s4_all_failed
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      trigger:
+        job_completion:
+          jobs:
+            - workspace_id: ${var.workspace_id}
+              job_id: ${var.s4_upstream_orders_job_id}
+            - workspace_id: ${var.workspace_id}
+              job_id: ${var.s4_upstream_customers_job_id}
+          if_status: FAILED
+      tasks:
+        - task_key: all_failed
+          environment_key: default
+          python_wheel_task:
+            package_name: job_completion_trigger
+            entry_point: show_completed_jobs
+            named_parameters:
+              completed_jobs: "{{job.trigger.job_completion.completed_jobs}}"
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+            dependencies:
+              - ../dist/*.whl
